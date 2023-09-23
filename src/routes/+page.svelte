@@ -51,10 +51,15 @@
 		gameState.choices[rightIndex] = result;
 		gameState.choices[leftIndex] = 0;
 
-		console.log(`Result should be ${result}`);
 		if (gameState.choices.includes(gameState.goal)) {
 			alert('holy shit you win!');
 		}
+
+        gameState.actionsTaken.push({
+            leftIndex,
+            operation,
+            rightIndex,
+        });
 	};
 
 	const handleChoiceClick = (index: number) => {

@@ -1,4 +1,4 @@
-import { Operation } from "./Operations";
+import { GameState } from "./GameState";
 
 export const generateRandomNumber = (min: number, max: number): number => {
 	const range = max - min;
@@ -91,13 +91,5 @@ export const newGame = () => {
 	const choices = generateChoicesArray();
 	const goal = generateGoal(choices);
 
-	return {
-		choices,
-		goal,
-		leftIndex: -1,
-		rightIndex: -1,
-		operationSelected: Operation.None,
-		errorClick: -1,
-        actionsTaken: [],
-	};
+    return new GameState(choices, goal);
 };
