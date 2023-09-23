@@ -3,6 +3,7 @@
     import { GameState } from '$lib/GameState';
 	import { newGame } from '$lib/NewGameUtils';
     import { Operation, operationButtons, operationUnicodeCharacter } from '$lib/Operations';
+    import { Action} from '$lib/Action';
 
 	let gameState = new GameState([], 0);
 
@@ -10,30 +11,30 @@
 		gameState = newGame();
 	});
 
-	const isValidExpression = (leftIndex: number, operation: string, rightIndex: number) => {
-		const left = gameState.choices[leftIndex];
-		const right = gameState.choices[rightIndex];
+	const isValidExpression = (action: Action) => {
+		const left = gameState.choices[action.leftIndex];
+		const right = gameState.choices[action.rightIndex];
 
-		if (operation == Operation.Subtract && left - right < 0) {
+		if (action.operation == Operation.Subtract && left - right < 0) {
 			return false;
 		}
 
-		if (operation == Operation.Divide && left % right !== 0) {
+		if (action.operation == Operation.Divide && left % right !== 0) {
 			return false;
 		}
 
 		return true;
 	};
 
-	const makePlay = (leftIndex: number, operation: string, rightIndex: number) => {
-		gameState.leftIndex = rightIndex;
+	const makePlay = (action: Action) => {
+		gameState.leftIndex = action.rightIndex;
 		gameState.operationSelected = Operation.None;
 
-		const left = gameState.choices[leftIndex];
-		const right = gameState.choices[rightIndex];
+		const left = gameState.choices[action.leftIndex];
+		const right = gameState.choices[action.rightIndex];
 		let result = 0;
 
-		switch (operation) {
+		switch (action.operation) {
 			case Operation.Add:
 				result = left + right;
 				break;
@@ -48,18 +49,14 @@
 				break;
 		}
 
-		gameState.choices[rightIndex] = result;
-		gameState.choices[leftIndex] = 0;
+		gameState.choices[action.rightIndex] = result;
+		gameState.choices[action.leftIndex] = 0;
 
 		if (gameState.choices.includes(gameState.goal)) {
 			alert('holy shit you win!');
 		}
 
-        gameState.actionsTaken.push({
-            leftIndex,
-            operation,
-            rightIndex,
-        });
+        gameState.actionsTaken.push(action);
 	};
 
 	const handleChoiceClick = (index: number) => {
@@ -68,12 +65,10 @@
 		}
 
 		if (gameState.operationSelected !== Operation.None && gameState.leftIndex !== index) {
-			const leftIndex = gameState.leftIndex;
-			const operation = gameState.operationSelected;
-			const rightIndex = index;
+            let action = new Action(gameState.leftIndex, gameState.operationSelected, index);
 
-			if (isValidExpression(leftIndex, operation, rightIndex)) {
-				makePlay(leftIndex, operation, rightIndex);
+			if (isValidExpression(action)) {
+				makePlay(action);
 			} else {
 				gameState.errorClick = index;
 				setTimeout(() => {

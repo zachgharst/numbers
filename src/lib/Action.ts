@@ -1,4 +1,4 @@
-class Action {
+export class Action {
     leftIndex: number;
     operation: string;
     rightIndex: number;
