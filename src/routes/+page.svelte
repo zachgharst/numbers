@@ -6,20 +6,16 @@
     import { Action} from '$lib/Action';
 
 	let gameState = new GameState([], 0);
-
 	onMount(() => {
 		gameState = newGame();
 	});
 
 	const isValidExpression = (action: Action) => {
-		const left = gameState.choices[action.leftIndex];
-		const right = gameState.choices[action.rightIndex];
-
-		if (action.operation == Operation.Subtract && left - right < 0) {
+		if (action.operation == Operation.Subtract && action.leftValue - action.rightValue < 0) {
 			return false;
 		}
 
-		if (action.operation == Operation.Divide && left % right !== 0) {
+		if (action.operation == Operation.Divide && action.leftValue % action.rightValue !== 0) {
 			return false;
 		}
 
@@ -30,22 +26,20 @@
 		gameState.leftIndex = action.rightIndex;
 		gameState.operationSelected = Operation.None;
 
-		const left = gameState.choices[action.leftIndex];
-		const right = gameState.choices[action.rightIndex];
 		let result = 0;
 
 		switch (action.operation) {
 			case Operation.Add:
-				result = left + right;
+				result = action.leftValue + action.rightValue;
 				break;
 			case Operation.Subtract:
-				result = left - right;
+				result = action.leftValue - action.rightValue;
 				break;
 			case Operation.Multiply:
-				result = left * right;
+				result = action.leftValue * action.rightValue;
 				break;
 			case Operation.Divide:
-				result = left / right;
+				result = action.leftValue / action.rightValue;
 				break;
 		}
 
@@ -59,13 +53,32 @@
         gameState.actionsTaken.push(action);
 	};
 
+    const undo = () => {
+        if (gameState.actionsTaken.length === 0) {
+            return;
+        }
+
+        const lastAction = gameState.actionsTaken.pop();
+
+        gameState.choices[lastAction.leftIndex] = lastAction.leftValue;
+        gameState.choices[lastAction.rightIndex] = lastAction.rightValue;
+        gameState.leftIndex = -1;
+        gameState.operationSelected = Operation.None;
+    }
+
 	const handleChoiceClick = (index: number) => {
 		if (gameState.choices[index] === 0) {
 			return;
 		}
 
 		if (gameState.operationSelected !== Operation.None && gameState.leftIndex !== index) {
-            let action = new Action(gameState.leftIndex, gameState.operationSelected, index);
+            let action = new Action(
+                gameState.leftIndex,
+                gameState.choices[gameState.leftIndex],
+                gameState.operationSelected,
+                index,
+                gameState.choices[index],
+            );
 
 			if (isValidExpression(action)) {
 				makePlay(action);
@@ -73,7 +86,7 @@
 				gameState.errorClick = index;
 				setTimeout(() => {
 					gameState.errorClick = -1;
-				}, 2000);
+				}, 1000);
 			}
 		} else if (gameState.leftIndex === index) {
 			gameState.leftIndex = -1;
@@ -85,7 +98,7 @@
 
 	const handleOperationClick = (operation: string) => {
 		if (operation === Operation.Undo) {
-			console.log('Clicked undo');
+            undo();
 		} else if (gameState.leftIndex !== -1) {
 			gameState.operationSelected = operation;
 		}
