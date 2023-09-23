@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-    import { GameState } from '$lib/GameState';
+	import { GameState } from '$lib/GameState';
 	import { newGame } from '$lib/NewGameUtils';
-    import { Operation, operationButtons, operationUnicodeCharacter } from '$lib/Operations';
-    import { Action} from '$lib/Action';
+	import { Operation, operationButtons, operationUnicodeCharacter } from '$lib/Operations';
+	import { Action } from '$lib/Action';
 
 	let gameState = new GameState([], 0);
 	onMount(() => {
@@ -50,21 +50,21 @@
 			alert('holy shit you win!');
 		}
 
-        gameState.actionsTaken.push(action);
+		gameState.actionsTaken.push(action);
 	};
 
-    const undo = () => {
-        if (gameState.actionsTaken.length === 0) {
-            return;
-        }
+	const undo = () => {
+		if (gameState.actionsTaken.length === 0) {
+			return;
+		}
 
-        const lastAction = gameState.actionsTaken.pop();
+		const lastAction = gameState.actionsTaken.pop();
 
-        gameState.choices[lastAction.leftIndex] = lastAction.leftValue;
-        gameState.choices[lastAction.rightIndex] = lastAction.rightValue;
-        gameState.leftIndex = -1;
-        gameState.operationSelected = Operation.None;
-    }
+		gameState.choices[lastAction.leftIndex] = lastAction.leftValue;
+		gameState.choices[lastAction.rightIndex] = lastAction.rightValue;
+		gameState.leftIndex = -1;
+		gameState.operationSelected = Operation.None;
+	};
 
 	const handleChoiceClick = (index: number) => {
 		if (gameState.choices[index] === 0) {
@@ -72,13 +72,13 @@
 		}
 
 		if (gameState.operationSelected !== Operation.None && gameState.leftIndex !== index) {
-            let action = new Action(
-                gameState.leftIndex,
-                gameState.choices[gameState.leftIndex],
-                gameState.operationSelected,
-                index,
-                gameState.choices[index],
-            );
+			let action = new Action(
+				gameState.leftIndex,
+				gameState.choices[gameState.leftIndex],
+				gameState.operationSelected,
+				index,
+				gameState.choices[index]
+			);
 
 			if (isValidExpression(action)) {
 				makePlay(action);
@@ -98,42 +98,44 @@
 
 	const handleOperationClick = (operation: string) => {
 		if (operation === Operation.Undo) {
-            undo();
+			undo();
 		} else if (gameState.leftIndex !== -1) {
 			gameState.operationSelected = operation;
 		}
 	};
 </script>
 
-<h1>{gameState.goal}</h1>
+<div class="container">
+	<h1>{gameState.goal}</h1>
 
-<div>
-	{#each gameState.choices as choice, index}
-		<button
-			class="numberChoice {gameState.leftIndex === index ? 'selected' : ''}"
-			class:invisible={choice === 0}
-			class:error={gameState.errorClick === index}
-			on:click={() => handleChoiceClick(index)}
-		>
-			{choice}
-		</button>
-	{/each}
-</div>
+	<div>
+		{#each gameState.choices as choice, index}
+			<button
+				class="numberChoice {gameState.leftIndex === index ? 'selected' : ''}"
+				class:invisible={choice === 0}
+				class:error={gameState.errorClick === index}
+				on:click={() => handleChoiceClick(index)}
+			>
+				{choice}
+			</button>
+		{/each}
+	</div>
 
-<div>
-	{#each operationButtons as operation}
-		<button
-			class="opButton"
-            class:selected={gameState.operationSelected === operation}
-			on:click={() => handleOperationClick(operation)}
-		>
-			{operationUnicodeCharacter(operation)}
-		</button>
-	{/each}
-</div>
+	<div>
+		{#each operationButtons as operation}
+			<button
+				class="opButton"
+				class:selected={gameState.operationSelected === operation}
+				on:click={() => handleOperationClick(operation)}
+			>
+				{operationUnicodeCharacter(operation)}
+			</button>
+		{/each}
+	</div>
 
-<div>
-	<button id="newGame" on:click={() => (gameState = newGame())}>New Game</button>
+	<div>
+		<button id="newGame" on:click={() => (gameState = newGame())}>New Game</button>
+	</div>
 </div>
 
 <style>
@@ -150,20 +152,33 @@
 		margin-top: 50px;
 	}
 
-	.numberChoice,
-	.opButton {
+	.container {
+		margin: auto;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	.numberChoice {
 		background: none;
 		border: 3px dotted #000;
-		border-radius: 38px;
-		height: 75px;
+		border-radius: 35px;
+		height: 70px;
 		font-size: 24px;
-		margin: 15px;
-		width: 75px;
+		margin: 5px;
+		width: 70px;
 	}
 
 	.opButton {
 		background: black;
+		border-radius: 30px;
+		border: 3px dotted #000;
 		color: white;
+		font-size: 24px;
+		height: 60px;
+		margin: 5px;
+		width: 60px;
 	}
 
 	.selected {
@@ -180,6 +195,7 @@
 		opacity: 0;
 	}
 
+	/* on mobile, i want this to be a menu at the bottom of the screen */
 	#newGame {
 		background: #55c2da;
 		border: 0;
