@@ -1,17 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+    import { GameState } from '$lib/GameState';
 	import { newGame } from '$lib/NewGameUtils';
+    import { Operation, operationButtons, operationUnicodeCharacter } from '$lib/Operations';
 
-	let gameState = {
-		choices: [0],
-		goal: 0,
-		leftIndex: -1,
-		rightIndex: -1,
-		operationIndex: -1,
-		errorClick: -1
-	};
-
-	let operationButtons = ['u', '+', '-', '*', '/'];
+	let gameState = new GameState([], 0);
 
 	onMount(() => {
 		gameState = newGame();
@@ -21,11 +14,11 @@
 		const left = gameState.choices[leftIndex];
 		const right = gameState.choices[rightIndex];
 
-		if (operation == '-' && left - right < 0) {
+		if (operation == Operation.Subtract && left - right < 0) {
 			return false;
 		}
 
-		if (operation == '/' && left % right !== 0) {
+		if (operation == Operation.Divide && left % right !== 0) {
 			return false;
 		}
 
@@ -34,23 +27,23 @@
 
 	const makePlay = (leftIndex: number, operation: string, rightIndex: number) => {
 		gameState.leftIndex = rightIndex;
-		gameState.operationIndex = -1;
+		gameState.operationSelected = Operation.None;
 
 		const left = gameState.choices[leftIndex];
 		const right = gameState.choices[rightIndex];
 		let result = 0;
 
 		switch (operation) {
-			case '+':
+			case Operation.Add:
 				result = left + right;
 				break;
-			case '-':
+			case Operation.Subtract:
 				result = left - right;
 				break;
-			case '*':
+			case Operation.Multiply:
 				result = left * right;
 				break;
-			case '/':
+			case Operation.Divide:
 				result = left / right;
 				break;
 		}
@@ -69,9 +62,9 @@
 			return;
 		}
 
-		if (gameState.operationIndex !== -1 && gameState.leftIndex !== index) {
+		if (gameState.operationSelected !== Operation.None && gameState.leftIndex !== index) {
 			const leftIndex = gameState.leftIndex;
-			const operation = operationButtons[gameState.operationIndex];
+			const operation = gameState.operationSelected;
 			const rightIndex = index;
 
 			if (isValidExpression(leftIndex, operation, rightIndex)) {
@@ -84,17 +77,17 @@
 			}
 		} else if (gameState.leftIndex === index) {
 			gameState.leftIndex = -1;
-			gameState.operationIndex = -1;
+			gameState.operationSelected = Operation.None;
 		} else {
 			gameState.leftIndex = index;
 		}
 	};
 
-	const handleOperationClick = (index: number) => {
-		if (index === 0) {
+	const handleOperationClick = (operation: string) => {
+		if (operation === Operation.Undo) {
 			console.log('Clicked undo');
 		} else if (gameState.leftIndex !== -1) {
-			gameState.operationIndex = index;
+			gameState.operationSelected = operation;
 		}
 	};
 </script>
@@ -115,12 +108,13 @@
 </div>
 
 <div>
-	{#each operationButtons as opButton, index}
+	{#each operationButtons as operation}
 		<button
-			class="opButton {gameState.operationIndex === index ? 'selected' : ''}"
-			on:click={() => handleOperationClick(index)}
+			class="opButton"
+            class:selected={gameState.operationSelected === operation}
+			on:click={() => handleOperationClick(operation)}
 		>
-			{opButton}
+			{operationUnicodeCharacter(operation)}
 		</button>
 	{/each}
 </div>

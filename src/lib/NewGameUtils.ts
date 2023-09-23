@@ -1,3 +1,5 @@
+import { Operation } from "./Operations";
+
 export const generateRandomNumber = (min: number, max: number): number => {
 	const range = max - min;
 	return min + Math.floor(Math.random() * range);
@@ -94,7 +96,8 @@ export const newGame = () => {
 		goal,
 		leftIndex: -1,
 		rightIndex: -1,
-		operationIndex: -1,
-		errorClick: -1
+		operationSelected: Operation.None,
+		errorClick: -1,
+        actionsTaken: [],
 	};
 };
