@@ -91,6 +91,10 @@ export const newGame = () => {
 
 	return {
 		choices,
-		goal
+		goal,
+		leftIndex: -1,
+		rightIndex: -1,
+		operationIndex: -1,
+		errorClick: -1
 	};
 };
