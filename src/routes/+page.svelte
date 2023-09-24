@@ -14,8 +14,8 @@
 
 <div class="container">
   <Goal goal={gameState.goal} />
-  <Choices {gameState} />
-  <Operations {gameState} />
+  <Choices bind:gameState={gameState} />
+  <Operations bind:gameState={gameState} />
   <NewGameButton newGame={() => (gameState = GameState.Create())} />
 </div>
 
