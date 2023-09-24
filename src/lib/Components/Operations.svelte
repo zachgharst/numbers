@@ -40,18 +40,27 @@
 
 <style>
   .opButton {
-    background: black;
+    background: #222;
     border-radius: 30px;
-    border: 3px dotted #000;
-    color: white;
+    border: 0;
+    color: #ddd;
     font-size: 24px;
     height: 60px;
     margin: 5px;
     width: 60px;
   }
 
+  :global(.dark-mode) .opButton {
+    background: #ddd;
+    color: #222;
+  }
+
   .selected {
     background: #b891bf;
     border: 0;
+  }
+
+  :global(.dark-mode) .selected {
+    background: #b891bf;
   }
 </style>

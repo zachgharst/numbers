@@ -98,20 +98,31 @@
 <style>
   .numberChoice {
     background: none;
-    border: 3px dotted #000;
     border-radius: 35px;
-    height: 70px;
+    border: 3px dotted #222;
     font-size: 24px;
+    height: 70px;
     margin: 5px;
     width: 70px;
   }
 
-  .error {
-    border-color: red;
-    color: red;
+  :global(.dark-mode) .numberChoice {
+    border: 3px dotted #ddd;
+    color: #ddd;
   }
 
-  .selected {
+  .error {
+    border-color: #d22;
+    color: #d22;
+  }
+
+  :global(.dark-mode) .error {
+    border-color: #d22;
+    color: #aa0000;
+  }
+
+  .selected,
+  :global(.dark-mode) .selected {
     background: #b891bf;
     border: 0;
   }

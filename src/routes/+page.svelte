@@ -5,18 +5,25 @@
   import Choices from '$lib/Components/Choices.svelte'
   import Operations from '$lib/Components/Operations.svelte'
   import NewGameButton from '$lib/Components/NewGameButton.svelte'
+  import ThemeButton from '$lib/Components/ThemeButton.svelte'
+  import { theme } from '$lib/store'
 
   let gameState = new GameState([0, 0, 0, 0, 0, 0, 0], 0)
   onMount(() => {
     gameState = GameState.Create()
+
+    if ($theme !== 'dark') {
+      document.body.classList.remove('dark-mode')
+    }
   })
 </script>
 
 <div class="container">
   <Goal goal={gameState.goal} />
-  <Choices bind:gameState={gameState} />
-  <Operations bind:gameState={gameState} />
+  <Choices bind:gameState />
+  <Operations bind:gameState />
   <NewGameButton newGame={() => (gameState = GameState.Create())} />
+  <ThemeButton />
 </div>
 
 <style>
@@ -29,10 +36,6 @@
 
   .container {
     margin: auto;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
   }
 
   @keyframes fadeInAnimation {
