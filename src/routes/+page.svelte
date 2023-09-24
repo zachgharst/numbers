@@ -16,7 +16,6 @@
   <Goal goal={gameState.goal} />
   <Choices {gameState} />
   <Operations {gameState} />
-
   <NewGameButton newGame={() => (gameState = GameState.Create())} />
 </div>
 
