@@ -106,7 +106,7 @@
 </script>
 
 <div class="container">
-  <h1>{gameState.goal}</h1>
+  <Goal goal={gameState.goal} />
 
   <div>
     {#each gameState.choices as choice, index}
