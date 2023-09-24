@@ -1,4 +1,4 @@
-import { GameState } from "./GameState";
+import { GameState } from './GameState';
 
 export const generateRandomNumber = (min: number, max: number): number => {
 	const range = max - min;
@@ -91,5 +91,5 @@ export const newGame = () => {
 	const choices = generateChoicesArray();
 	const goal = generateGoal(choices);
 
-    return new GameState(choices, goal);
+	return new GameState(choices, goal);
 };
