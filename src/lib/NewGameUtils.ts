@@ -86,10 +86,3 @@ export const generateGoal = (choices: number[]): number => {
 
   return result
 }
-
-export const newGame = () => {
-  const choices = generateChoicesArray()
-  const goal = generateGoal(choices)
-
-  return new GameState(choices, goal)
-}

@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { GameState } from '$lib/GameState'
-  import { newGame } from '$lib/NewGameUtils'
   import { Operation, operationButtons, operationUnicodeCharacter } from '$lib/Operations'
   import { Action } from '$lib/Action'
+  import Goal from '$lib/Components/Goal.svelte'
 
-  let gameState = new GameState([], 0)
+  let gameState = new GameState([0, 0, 0, 0, 0, 0, 0], 0)
   onMount(() => {
-    gameState = newGame()
+    gameState = GameState.Create()
   })
 
   const isValidExpression = (action: Action) => {
@@ -54,11 +54,11 @@
   }
 
   const undo = () => {
-    if (gameState.actionsTaken.length === 0) {
+    const lastAction = gameState.actionsTaken.pop()
+
+    if (lastAction === undefined) {
       return
     }
-
-    const lastAction = gameState.actionsTaken.pop()
 
     gameState.choices[lastAction.leftIndex] = lastAction.leftValue
     gameState.choices[lastAction.rightIndex] = lastAction.rightValue
@@ -134,7 +134,7 @@
   </div>
 
   <div>
-    <button id="newGame" on:click={() => (gameState = newGame())}>New Game</button>
+    <button id="newGame" on:click={() => (gameState = GameState.Create())}>New Game</button>
   </div>
 </div>
 

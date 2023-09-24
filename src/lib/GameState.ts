@@ -1,3 +1,5 @@
+import type { Action } from './Action'
+import { generateChoicesArray, generateGoal } from './NewGameUtils'
 import { Operation } from './Operations'
 
 export class GameState {
@@ -12,5 +14,12 @@ export class GameState {
   constructor(choices: number[], goal: number) {
     this.choices = choices
     this.goal = goal
+  }
+
+  public static Create = () => {
+    const choices = generateChoicesArray()
+    const goal = generateGoal(choices)
+
+    return new GameState(choices, goal)
   }
 }
