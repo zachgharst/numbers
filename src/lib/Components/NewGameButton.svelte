@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let newGame: Function
+  export let newGame: () => void
 </script>
 
 <div>

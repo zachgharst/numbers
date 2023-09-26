@@ -1,5 +1,3 @@
-import { GameState } from './GameState'
-
 export const generateRandomNumber = (min: number, max: number): number => {
   const range = max - min
   return min + Math.floor(Math.random() * range)
