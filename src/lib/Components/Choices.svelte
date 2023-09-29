@@ -5,6 +5,8 @@
 
   export let gameState: GameState
 
+  const HiddenChoiceValue: number = -1
+
   // this should be somewhere else
   const isValidExpression = (action: Action) => {
     if (action.operation == Operation.Subtract && action.leftValue - action.rightValue < 0) {
@@ -18,7 +20,7 @@
     return true
   }
 
-  // this should be somewhere else
+  // this should also be somewhere else
   const makePlay = (action: Action) => {
     gameState.leftIndex = action.rightIndex
     gameState.operationSelected = Operation.None
@@ -41,7 +43,7 @@
     }
 
     gameState.choices[action.rightIndex] = result
-    gameState.choices[action.leftIndex] = 0
+    gameState.choices[action.leftIndex] = HiddenChoiceValue
 
     if (gameState.choices.includes(gameState.goal)) {
       alert('holy shit you win!')
@@ -51,7 +53,7 @@
   }
 
   const handleChoiceClick = (index: number) => {
-    if (gameState.choices[index] === 0) {
+    if (gameState.choices[index] === HiddenChoiceValue) {
       return
     }
 
@@ -87,7 +89,7 @@
       class="numberChoice"
       class:error={gameState.errorClick === index}
       class:selected={gameState.leftIndex === index}
-      class:invisible={choice === 0}
+      class:invisible={choice === HiddenChoiceValue}
       on:click={() => handleChoiceClick(index)}
     >
       {choice}
