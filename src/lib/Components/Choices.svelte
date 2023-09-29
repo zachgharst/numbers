@@ -46,14 +46,14 @@
     gameState.choices[action.leftIndex] = HiddenChoiceValue
 
     if (gameState.choices.includes(gameState.goal)) {
-      alert('holy shit you win!')
+      gameState.victoryState = true
     }
 
     gameState.actionsTaken.push(action)
   }
 
   const handleChoiceClick = (index: number) => {
-    if (gameState.choices[index] === HiddenChoiceValue) {
+    if (gameState.choices[index] === HiddenChoiceValue || gameState.victoryState) {
       return
     }
 
@@ -90,6 +90,7 @@
       class:error={gameState.errorClick === index}
       class:selected={gameState.leftIndex === index}
       class:invisible={choice === HiddenChoiceValue}
+      class:victory={gameState.leftIndex === index && gameState.victoryState}
       on:click={() => handleChoiceClick(index)}
     >
       {choice}
@@ -131,5 +132,9 @@
 
   .invisible {
     opacity: 0;
+  }
+
+  .victory {
+    background: #2a2 !important;
   }
 </style>

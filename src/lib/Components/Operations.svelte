@@ -15,11 +15,14 @@
     gameState.choices[lastAction.rightIndex] = lastAction.rightValue
     gameState.leftIndex = -1
     gameState.operationSelected = Operation.None
+    gameState.victoryState = false
   }
 
   const handleOperationClick = (operation: string) => {
     if (operation === Operation.Undo) {
       undo()
+    } else if(gameState.victoryState) {
+        return
     } else if (gameState.leftIndex !== -1) {
       gameState.operationSelected = operation
     }

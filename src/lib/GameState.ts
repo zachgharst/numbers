@@ -10,6 +10,8 @@ export class GameState {
   operationSelected: string = Operation.None
   errorClick: number = -1
   actionsTaken: Action[] = []
+  victoryState: boolean = false
+
 
   constructor(choices: number[], goal: number) {
     this.choices = choices

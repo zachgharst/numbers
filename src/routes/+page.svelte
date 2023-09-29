@@ -19,7 +19,7 @@
 </script>
 
 <div class="container">
-  <Goal goal={gameState.goal} />
+  <Goal {gameState} />
   <Choices bind:gameState />
   <Operations bind:gameState />
   <NewGameButton newGame={() => (gameState = GameState.Create())} />
