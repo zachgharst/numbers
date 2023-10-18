@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { GameState } from "$lib/GameState"
+  import type { GameState } from '$lib/GameState'
 
   export let gameState: GameState
 </script>

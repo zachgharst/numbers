@@ -7,8 +7,20 @@
   import NewGameButton from '$lib/Components/NewGameButton.svelte'
   import ThemeButton from '$lib/Components/ThemeButton.svelte'
   import { theme } from '$lib/store'
+  import Constants from '$lib/Constants'
 
-  let gameState = new GameState([0, 0, 0, 0, 0, 0, 0], 0)
+  let gameState = new GameState(
+    [
+      Constants.HiddenChoiceValue,
+      Constants.HiddenChoiceValue,
+      Constants.HiddenChoiceValue,
+      Constants.HiddenChoiceValue,
+      Constants.HiddenChoiceValue,
+      Constants.HiddenChoiceValue,
+      Constants.HiddenChoiceValue,
+    ],
+    0
+  )
   onMount(() => {
     gameState = GameState.Create()
 

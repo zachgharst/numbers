@@ -1,11 +1,10 @@
 <script lang="ts">
   import { Action } from '$lib/Action'
+  import Constants from '$lib/Constants'
   import type { GameState } from '$lib/GameState'
   import { Operation } from '$lib/Operations'
 
   export let gameState: GameState
-
-  const HiddenChoiceValue: number = -1
 
   // this should be somewhere else
   const isValidExpression = (action: Action) => {
@@ -43,7 +42,7 @@
     }
 
     gameState.choices[action.rightIndex] = result
-    gameState.choices[action.leftIndex] = HiddenChoiceValue
+    gameState.choices[action.leftIndex] = Constants.HiddenChoiceValue
 
     if (gameState.choices.includes(gameState.goal)) {
       gameState.victoryState = true
@@ -53,7 +52,7 @@
   }
 
   const handleChoiceClick = (index: number) => {
-    if (gameState.choices[index] === HiddenChoiceValue || gameState.victoryState) {
+    if (gameState.choices[index] === Constants.HiddenChoiceValue || gameState.victoryState) {
       return
     }
 
@@ -89,7 +88,7 @@
       class="numberChoice"
       class:error={gameState.errorClick === index}
       class:selected={gameState.leftIndex === index}
-      class:invisible={choice === HiddenChoiceValue}
+      class:invisible={choice === Constants.HiddenChoiceValue}
       class:victory={gameState.leftIndex === index && gameState.victoryState}
       on:click={() => handleChoiceClick(index)}
     >

@@ -15,7 +15,7 @@ export const operationButtons = [
   Operation.Divide,
 ]
 
-type Operation = typeof Operation[keyof typeof Operation]
+type Operation = (typeof Operation)[keyof typeof Operation]
 
 export const operationUnicodeCharacter = (operation: Operation) => {
   switch (operation) {

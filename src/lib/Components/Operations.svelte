@@ -21,8 +21,8 @@
   const handleOperationClick = (operation: string) => {
     if (operation === Operation.Undo) {
       undo()
-    } else if(gameState.victoryState) {
-        return
+    } else if (gameState.victoryState) {
+      return
     } else if (gameState.leftIndex !== -1) {
       gameState.operationSelected = operation
     }

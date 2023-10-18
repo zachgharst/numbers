@@ -1,17 +1,17 @@
 import type { Action } from './Action'
+import Constants from './Constants'
 import { generateChoicesArray, generateGoal } from './NewGameUtils'
 import { Operation } from './Operations'
 
 export class GameState {
   choices: number[] = []
   goal: number = 0
-  leftIndex: number = -1
-  rightIndex: number = -1
+  leftIndex: number = Constants.HiddenChoiceValue
+  rightIndex: number = Constants.HiddenChoiceValue
   operationSelected: string = Operation.None
   errorClick: number = -1
   actionsTaken: Action[] = []
   victoryState: boolean = false
-
 
   constructor(choices: number[], goal: number) {
     this.choices = choices
