@@ -5,7 +5,7 @@ export const Operation = {
   Subtract: 'subtract',
   Multiply: 'multiply',
   Divide: 'divide',
-}
+} as const
 
 export const operationButtons = [
   Operation.Undo,
@@ -15,7 +15,9 @@ export const operationButtons = [
   Operation.Divide,
 ]
 
-export const operationUnicodeCharacter = (operation: string) => {
+type Operation = typeof Operation[keyof typeof Operation]
+
+export const operationUnicodeCharacter = (operation: Operation) => {
   switch (operation) {
     case Operation.Undo:
       return '⎌'
